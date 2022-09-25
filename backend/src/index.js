@@ -15,12 +15,11 @@ app.get('/api/todos', (req, res) => {
 })
 
 app.post('/api/todo', (req, res) => {
-  const newTodo = {
-    id: todoList.length + 1,
-    title: req.body.title,
-    todos: req.body.todos,
-  }
-  todoList.push(newTodo)
+  const id = req.body.id
+  const newTodo = req.body.todos
+  let task = []
+  task = todoList[0][id].todos
+  task.push(newTodo)
   res.status(201).json(newTodo)
 })
 
