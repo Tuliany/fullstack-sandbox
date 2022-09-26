@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { TextField, Card, CardContent, CardActions, Button, Typography } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
 import AddIcon from '@mui/icons-material/Add'
@@ -15,11 +15,11 @@ export const TodoListForm = ({ todoList, saveTodoList }) => {
     axios
       .post(url, {
         id: todoList.id,
-        title: todoList.title,
-        todos: { todos },
+        todos: JSON.stringify(todos.pop()).replace(/"/g, ''),
       })
       .then((res) => {
         console.log(res.data)
+        setTodos([...todos, res.data])
       })
       .catch((error) => {
         console.log(error)
@@ -34,7 +34,6 @@ export const TodoListForm = ({ todoList, saveTodoList }) => {
           onSubmit={handleSubmit}
           style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}
         >
-          {Object.keys((todos) => console.log(todos))}
           {todos.map((name, index) => (
             <div key={index} style={{ display: 'flex', alignItems: 'center' }}>
               <Typography sx={{ margin: '8px' }} variant='h6'>

@@ -17,17 +17,20 @@ export const TodoLists = ({ style }) => {
   const [todoLists, setTodoLists] = useState({})
   const [activeList, setActiveList] = useState()
 
-  useEffect(() => {
+  const fetchTodoLists = () => {
     axios
       .get(url)
       .then((res) => {
-        console.log(res)
-        setTodoLists(res.data[0]) 
+        setTodoLists(res.data[0])
       })
       .catch((err) => {
         console.log(err)
       })
-  }, [])
+  }
+
+  useEffect(() => {
+    fetchTodoLists()
+  }, [todoLists])
 
   if (!Object.keys(todoLists).length) return null
   return (
