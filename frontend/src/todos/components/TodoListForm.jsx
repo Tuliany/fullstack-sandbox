@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { TextField, Card, CardContent, CardActions, Button, Typography } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
 import AddIcon from '@mui/icons-material/Add'
@@ -8,6 +8,7 @@ const url = 'http://localhost:3001/api/todo'
 
 export const TodoListForm = ({ todoList, saveTodoList }) => {
   const [todos, setTodos] = useState(todoList.todos)
+  const ref = useRef
 
   const handleSubmit = (event) => {
     event.preventDefault()
@@ -25,6 +26,15 @@ export const TodoListForm = ({ todoList, saveTodoList }) => {
         console.log(error)
       })
   }
+
+   useEffect(() => {
+     clearTimeout(ref.current)
+     ref.current = setTimeout(() => {
+       ref.current = null
+       console.log('Saving...', todos)
+       setTodos(todos)
+     }, 3000)
+   }, [todos])
 
   return (
     <Card sx={{ margin: '0 1rem' }}>
