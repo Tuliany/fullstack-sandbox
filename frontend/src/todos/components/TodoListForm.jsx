@@ -1,5 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { TextField, Card, CardContent, CardActions, Button, Typography } from '@mui/material'
+import {
+  TextField,
+  Card,
+  CardContent,
+  CardActions,
+  Checkbox,
+  Button,
+  Typography,
+} from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
 import AddIcon from '@mui/icons-material/Add'
 import axios from 'axios'
@@ -8,6 +16,8 @@ const url = 'http://localhost:3001/api/todo'
 
 export const TodoListForm = ({ todoList, saveTodoList }) => {
   const [todos, setTodos] = useState(todoList.todos)
+  const [isChecked, setIsChecked] = useState(true)
+  const [completed, setCompleted] = useState(0)
   const ref = useRef
 
   const handleSubmit = (event) => {
@@ -27,14 +37,25 @@ export const TodoListForm = ({ todoList, saveTodoList }) => {
       })
   }
 
-   useEffect(() => {
-     clearTimeout(ref.current)
-     ref.current = setTimeout(() => {
-       ref.current = null
-       console.log('Saving...', todos)
-       setTodos(todos)
-     }, 3000)
-   }, [todos])
+  const handleComplete = (index) => {
+    todos.map((todos) => {
+      if (todos[index]) {
+        setIsChecked(isChecked)
+        if (isChecked) {
+          setCompleted(completed + 1)
+        }
+      }
+    })
+  }
+
+  useEffect(() => {
+    clearTimeout(ref.current)
+    ref.current = setTimeout(() => {
+      ref.current = null
+      console.log('Saving...', todos)
+      setTodos(todos)
+    }, 3000)
+  }, [todos])
 
   return (
     <Card sx={{ margin: '0 1rem' }}>
@@ -61,6 +82,11 @@ export const TodoListForm = ({ todoList, saveTodoList }) => {
                     ...todos.slice(index + 1),
                   ])
                 }}
+              />
+              <Checkbox
+                value={name}
+                checked={isChecked[index]}
+                onChange={() => handleComplete(index)}
               />
               <Button
                 sx={{ margin: '8px' }}
@@ -92,6 +118,8 @@ export const TodoListForm = ({ todoList, saveTodoList }) => {
               Save
             </Button>
           </CardActions>
+          <p>Pending Tasks</p> {todos.length - completed}
+          <p>Completed Tasks </p> {completed}
         </form>
       </CardContent>
     </Card>
